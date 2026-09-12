@@ -1,0 +1,211 @@
+/* ============================================================
+   Student Photo Capture WebApp — Falcon-style theme (Red/White)
+   ============================================================ */
+
+:root {
+  --brand: #DC3545;
+  --brand-dark: #B02A37;
+  --brand-light: #FDEBEC;
+  --sidebar-w: 260px;
+  --topbar-h: 64px;
+  --card-radius: 0.75rem;
+  --bs-body-bg: #F5F7FA;
+}
+
+[data-bs-theme="dark"] {
+  --bs-body-bg: #12151C;
+  --brand-light: #3A1E22;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: var(--bs-body-bg);
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--brand);
+  color: #fff;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 1030;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.25rem 1.25rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+.sidebar-brand i { font-size: 1.4rem; }
+
+.sidebar-nav { padding: 1rem 0.75rem; flex: 1; }
+.sidebar-nav .nav-link {
+  color: rgba(255,255,255,0.9);
+  border-radius: 0.5rem;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.92rem;
+  margin-bottom: 0.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.sidebar-nav .nav-link.active,
+.sidebar-nav .nav-link:hover {
+  background: rgba(255,255,255,0.16);
+  color: #fff;
+}
+
+.sidebar-footer {
+  padding: 1rem 1.25rem;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.75);
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+/* ---------- Main content ---------- */
+.main-content {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+}
+
+.topbar {
+  height: var(--topbar-h);
+  background: var(--bs-body-bg);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  backdrop-filter: blur(6px);
+}
+
+.content-wrap { padding: 1.5rem; }
+
+/* ---------- Stat cards ---------- */
+.stat-card {
+  border: none;
+  border-radius: var(--card-radius);
+  background: var(--bs-body);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.stat-icon {
+  width: 46px; height: 46px;
+  border-radius: 0.6rem;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+}
+
+/* ---------- Cards / table ---------- */
+.card { border: none; border-radius: var(--card-radius); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.card-header { background: transparent; border-bottom: 1px solid rgba(0,0,0,0.06); }
+
+.table thead th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #8a94a6;
+  border-bottom-width: 1px;
+  white-space: nowrap;
+}
+.table td { vertical-align: middle; }
+
+.student-thumb {
+  width: 42px; height: 56px;
+  object-fit: cover;
+  border-radius: 0.35rem;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.student-thumb-empty {
+  display: flex; align-items: center; justify-content: center;
+  background: #eef0f3;
+  color: #b0b7c3;
+  font-size: 1.1rem;
+}
+
+.badge-status-done {
+  background: #E8F8EE; color: #1E8E5A; font-weight: 500; padding: 0.4em 0.7em;
+}
+.badge-status-pending {
+  background: #FFF4E5; color: #B76E00; font-weight: 500; padding: 0.4em 0.7em;
+}
+
+/* ---------- Buttons ---------- */
+.btn-brand {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+.btn-brand:hover { background: var(--brand-dark); border-color: var(--brand-dark); color: #fff; }
+.btn-outline-brand {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.btn-outline-brand:hover { background: var(--brand); color: #fff; }
+
+/* ---------- Camera modal ---------- */
+.camera-stage {
+  position: relative;
+  background: #000;
+  border-radius: 0.6rem;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  max-height: 60vh;
+  margin: 0 auto;
+}
+.camera-stage video,
+.camera-stage img,
+.camera-stage canvas {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+
+.overlay-frame {
+  position: absolute;
+  inset: 6% 12%;
+  border: 2.5px dashed rgba(255,255,255,0.85);
+  border-radius: 50% 50% 8% 8% / 60% 60% 8% 8%;
+  pointer-events: none;
+}
+.overlay-frame[data-ratio="4x6"] {
+  inset: 4% 18%;
+}
+
+.device-bar { gap: 0.5rem; }
+
+/* ---------- Queue panel ---------- */
+.queue-item {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.queue-item:last-child { border-bottom: none; }
+.spin { animation: spin 1s linear infinite; display: inline-block; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* ---------- Loading overlay ---------- */
+#loadingOverlay {
+  position: fixed; inset: 0;
+  background: rgba(255,255,255,0.75);
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+}
+[data-bs-theme="dark"] #loadingOverlay { background: rgba(18,21,28,0.8); }
+
+/* ---------- Toasts ---------- */
+.toast-success .toast-body { background: #1E8E5A; color: #fff; border-radius: 0.5rem; }
+.toast-error .toast-body { background: var(--brand); color: #fff; border-radius: 0.5rem; }
+.toast-info .toast-body { background: #333; color: #fff; border-radius: 0.5rem; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 991.98px) {
+  .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; }
+  .sidebar.show { transform: translateX(0); }
+  .main-content { margin-left: 0; }
+}
