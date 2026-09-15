@@ -12,7 +12,7 @@
 
 const CONFIG = {
   // URL Web App sau khi deploy Google Apps Script (bắt buộc)
-  GAS_WEB_APP_URL: "https://script.google.com/macros/s/AKfycbyLZLfw7TOZu3bbz35Cx1Xn8XyHJJXWAwgtxJxiDXVErn6oyZI6OJBgYTZxcxApoK_SiQ/exec",
+  GAS_WEB_APP_URL: "https://script.google.com/macros/s/AKfycbx-sw81mBQiF-2wt68eMhZsXkyU4TiwF4SQIfeNlyoYd6vzcuzdiOoEucipOnXmy1wHAg/exec",
 
   // Tên trường (hiển thị trên header, có thể đổi tuỳ ý)
   SCHOOL_NAME: "Hệ thống Quản lý Ảnh Thẻ Sinh Viên",
