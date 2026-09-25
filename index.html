@@ -7,7 +7,8 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Montserrat:wght@600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
@@ -22,7 +23,7 @@
     <a href="#" class="nav-link active"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
     <a href="#" class="nav-link"><i class="bi bi-people-fill"></i> Danh sách sinh viên</a>
     <a href="#" class="nav-link"><i class="bi bi-cloud-arrow-up-fill"></i> Hàng đợi Upload</a>
-    <a href="https://docs.google.com/spreadsheets/d/1mxGI2ex3Tyh050LmKX_0peJX98Gzl0iRfP1sdPNR6wg/edit" target="_blank" class="nav-link"><i class="bi bi-file-earmark-spreadsheet-fill"></i> Mở Google Sheet</a>
+    <a href="https://docs.google.com/spreadsheets/d/1HPpIBHsiCimcIybcw5sLaSTh7--MUHM6OTqKGb4UHwM/edit" target="_blank" class="nav-link"><i class="bi bi-file-earmark-spreadsheet-fill"></i> Mở Google Sheet</a>
     <a href="README.md" target="_blank" class="nav-link"><i class="bi bi-book-fill"></i> Hướng dẫn sử dụng</a>
   </nav>
   <div class="sidebar-footer">
@@ -162,14 +163,14 @@
   </div>
 </div>
 
-<!-- ============== CAMERA MODAL ============== -->
+<!-- ============== KIỂM TRA / CHỤP ẢNH THẺ MODAL ============== -->
 <div class="modal fade" id="cameraModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <div>
-          <h5 class="modal-title mb-0">Chụp ảnh thẻ — <span id="modalStudentName">—</span></h5>
-          <div class="text-muted small">MSSV: <span id="modalStudentMssv">—</span></div>
+          <h5 class="modal-title mb-0">Kiểm tra ảnh thẻ — <span id="modalStudentName">—</span></h5>
+          <div class="text-muted small">MSSV: <span id="modalStudentMssv">—</span> · Niên khoá: <span id="modalStudentNienKhoa">—</span></div>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
@@ -185,28 +186,61 @@
           </div>
         </div>
 
-        <div class="row g-2 mb-2 device-bar">
-          <div class="col-8 col-md-8">
+        <!-- BƯỚC 1: Chọn nguồn ảnh -->
+        <div id="sourceChooseView" class="text-center py-5">
+          <i class="bi bi-person-bounding-box fs-1 text-muted d-block mb-3"></i>
+          <p class="text-muted mb-4">Chọn nguồn ảnh chân dung cho sinh viên này</p>
+          <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <button type="button" class="btn btn-outline-brand btn-lg px-4" id="btnChooseUpload">
+              <i class="bi bi-upload me-2"></i>Tải ảnh lên từ máy
+            </button>
+            <button type="button" class="btn btn-brand btn-lg px-4" id="btnChooseCamera">
+              <i class="bi bi-camera-fill me-2"></i>Chụp bằng Camera
+            </button>
+          </div>
+          <input type="file" id="fileInput" accept="image/*" class="d-none">
+        </div>
+
+        <!-- BƯỚC 2: Camera trực tiếp (nếu chọn Camera) -->
+        <div id="liveView" class="d-none">
+          <div class="mb-2">
             <select class="form-select form-select-sm" id="deviceSelect"></select>
           </div>
-          <div class="col-4 col-md-4">
-            <select class="form-select form-select-sm" id="ratioSelect">
-              <option value="3x4" selected>Khung 3x4</option>
-              <option value="4x6">Khung 4x6</option>
-            </select>
+          <div class="camera-stage">
+            <video id="cameraVideo" autoplay playsinline muted></video>
+            <div class="overlay-frame" id="overlayFrame" data-ratio="1x1"></div>
           </div>
         </div>
 
-        <div class="camera-stage">
-          <div id="liveView">
-            <video id="cameraVideo" autoplay playsinline muted></video>
-            <div class="overlay-frame" id="overlayFrame" data-ratio="3x4"></div>
+        <!-- BƯỚC 3: Điều chỉnh khung tròn (Cropper.js) -->
+        <div id="cropView" class="d-none">
+          <div class="row g-3">
+            <div class="col-8">
+              <div class="crop-container">
+                <img id="cropImage" src="" alt="Ảnh để điều chỉnh">
+              </div>
+              <div class="mt-2">
+                <label class="form-label small text-muted mb-1"><i class="bi bi-zoom-in me-1"></i>Zoom</label>
+                <input type="range" class="form-range" id="zoomRange">
+              </div>
+            </div>
+            <div class="col-4 text-center">
+              <div class="crop-preview-wrap mx-auto">
+                <div class="crop-preview-circle" id="cropPreviewCircle"></div>
+              </div>
+              <div class="small text-muted mt-2">Xem trước khung tròn trên thẻ</div>
+            </div>
           </div>
-          <div id="previewView" class="d-none">
-            <img id="previewImg" alt="Ảnh vừa chụp">
-          </div>
-          <canvas id="captureCanvas" class="d-none"></canvas>
         </div>
+
+        <!-- BƯỚC 4: Xem trước thẻ hoàn chỉnh -->
+        <div id="cardPreviewView" class="d-none">
+          <div class="camera-stage" style="aspect-ratio: 1050/660;">
+            <img id="cardPreviewImg" alt="Thẻ sinh viên hoàn chỉnh">
+          </div>
+        </div>
+
+        <canvas id="captureCanvas" class="d-none"></canvas>
 
       </div>
       <div class="modal-footer justify-content-between">
@@ -214,9 +248,10 @@
           <i class="bi bi-skip-forward-fill me-1"></i>Bỏ qua SV này
         </button>
         <div class="ms-auto d-flex gap-2">
-          <button type="button" class="btn btn-brand" id="btnShoot"><i class="bi bi-camera-fill me-1"></i>Chụp</button>
-          <button type="button" class="btn btn-outline-secondary" id="btnRetake"><i class="bi bi-arrow-counterclockwise me-1"></i>Chụp lại</button>
-          <button type="button" class="btn btn-success" id="btnSave"><i class="bi bi-check-lg me-1"></i>Lưu ảnh</button>
+          <button type="button" class="btn btn-outline-secondary d-none" id="btnBack"><i class="bi bi-arrow-left me-1"></i>Làm lại</button>
+          <button type="button" class="btn btn-brand d-none" id="btnShoot"><i class="bi bi-camera-fill me-1"></i>Chụp</button>
+          <button type="button" class="btn btn-info text-white d-none" id="btnCropConfirm"><i class="bi bi-person-badge-fill me-1"></i>Ghép thẻ</button>
+          <button type="button" class="btn btn-success d-none" id="btnSave"><i class="bi bi-check-lg me-1"></i>Lưu thẻ</button>
         </div>
       </div>
     </div>
@@ -235,9 +270,13 @@
 <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" style="z-index: 2100;"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 <script src="js/config.js"></script>
 <script src="js/api.js"></script>
 <script src="js/camera.js"></script>
+<script src="js/cropper-ui.js"></script>
+<script src="js/idcard.js"></script>
 <script src="js/queue.js"></script>
 <script src="js/app.js"></script>
 </body>
