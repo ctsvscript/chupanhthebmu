@@ -8,7 +8,6 @@
 
 const CropperUI = (() => {
   let cropper = null;
-  let baseRatio = 1;
 
   /**
    * Khởi tạo Cropper trên 1 thẻ <img> đã có src, đồng bộ xem trước
@@ -19,8 +18,8 @@ const CropperUI = (() => {
 
     cropper = new Cropper(imgEl, {
       aspectRatio: 1,
-      viewMode: 1,
-      dragMode: "crop",
+      viewMode: 0,
+      dragMode: "move",
       autoCropArea: 0.85,
       cropBoxResizable: true,
       cropBoxMovable: true,
@@ -30,19 +29,20 @@ const CropperUI = (() => {
       zoomOnWheel: true,
       responsive: true,
       ready() {
-        const imageData = cropper.getImageData();
-        baseRatio = (imageData && imageData.naturalWidth) ? (imageData.width / imageData.naturalWidth) : 1;
         if (zoomRangeEl) {
-          zoomRangeEl.min = "0.2";
-          zoomRangeEl.max = "3.0";
-          zoomRangeEl.step = "0.02";
-          zoomRangeEl.value = "1.0";
+          const imageData = cropper.getImageData();
+          const initialRatio = (imageData && imageData.width && imageData.naturalWidth)
+            ? imageData.width / imageData.naturalWidth
+            : 1;
+          zoomRangeEl.min = Math.max(0.01, initialRatio * 0.2).toFixed(3);
+          zoomRangeEl.max = (initialRatio * 4.0).toFixed(3);
+          zoomRangeEl.step = "0.005";
+          zoomRangeEl.value = initialRatio.toFixed(3);
         }
       },
       zoom(event) {
-        if (zoomRangeEl && baseRatio > 0 && event.detail && event.detail.ratio) {
-          const currentScale = event.detail.ratio / baseRatio;
-          zoomRangeEl.value = Math.max(0.2, Math.min(3.0, currentScale)).toFixed(2);
+        if (zoomRangeEl && event.detail && typeof event.detail.ratio === "number") {
+          zoomRangeEl.value = event.detail.ratio.toFixed(3);
         }
       },
     });
@@ -50,10 +50,9 @@ const CropperUI = (() => {
     return cropper;
   }
 
-  function setZoom(scale) {
-    if (cropper && baseRatio > 0) {
-      const targetRatio = baseRatio * parseFloat(scale);
-      cropper.zoomTo(targetRatio);
+  function setZoom(val) {
+    if (cropper && val) {
+      cropper.zoomTo(parseFloat(val));
     }
   }
 
