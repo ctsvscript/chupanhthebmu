@@ -20,16 +20,29 @@ const IdCard = (() => {
     });
   }
 
-  async function getLogo() {
-    if (logoLoadAttempted) return cachedLogo;
-    logoLoadAttempted = true;
+  let cachedHeaderLogo = null;
+  let cachedWatermarkLogo = null;
+
+  async function getHeaderLogo() {
+    if (cachedHeaderLogo) return cachedHeaderLogo;
     try {
-      cachedLogo = await loadImage(C.LOGO_PATH);
+      cachedHeaderLogo = await loadImage(C.LOGO_PATH);
     } catch (e) {
-      console.warn("Không thể tải logo:", e);
-      cachedLogo = null;
+      console.warn("Không thể tải header logo:", e);
+      cachedHeaderLogo = null;
     }
-    return cachedLogo;
+    return cachedHeaderLogo;
+  }
+
+  async function getWatermarkLogo() {
+    if (cachedWatermarkLogo) return cachedWatermarkLogo;
+    try {
+      cachedWatermarkLogo = await loadImage(C.WATERMARK_LOGO_PATH);
+    } catch (e) {
+      console.warn("Không thể tải watermark logo:", e);
+      cachedWatermarkLogo = null;
+    }
+    return cachedWatermarkLogo;
   }
 
   function drawFallbackLogo(ctx, cx, cy, r) {
@@ -52,17 +65,16 @@ const IdCard = (() => {
   }
 
   function drawWatermarkPattern(ctx, logoImg) {
+    if (!logoImg) return;
     ctx.save();
-    ctx.globalAlpha = 0.07;
+    ctx.globalAlpha = 0.08;
     const stepX = 140, stepY = 120;
-    for (let y = C.HEADER_HEIGHT + 20; y < C.HEIGHT - 40; y += stepY) {
+    for (let y = C.HEADER_HEIGHT + 30; y < C.HEIGHT - 40; y += stepY) {
       for (let x = -50; x < C.WIDTH + 50; x += stepX) {
         ctx.save();
         ctx.translate(x, y);
         ctx.rotate((-25 * Math.PI) / 180);
-        if (logoImg) {
-          ctx.drawImage(logoImg, -30, -30, 60, 60);
-        }
+        ctx.drawImage(logoImg, -35, -35, 70, 70);
         ctx.restore();
       }
     }
@@ -152,25 +164,28 @@ const IdCard = (() => {
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, C.WIDTH, C.HEIGHT);
 
-    const logo = await getLogo();
+    const [headerLogo, watermarkLogo] = await Promise.all([
+      getHeaderLogo(),
+      getWatermarkLogo(),
+    ]);
 
-    // Nền Watermark logo mờ
-    drawWatermarkPattern(ctx, logo);
+    // Nền Watermark logo mờ SVG
+    drawWatermarkPattern(ctx, watermarkLogo);
 
     // Header Đỏ
     ctx.fillStyle = C.BRAND_RED;
     ctx.fillRect(0, 0, C.WIDTH, C.HEADER_HEIGHT);
 
-    // Badge Logo Header
+    // Badge Logo Header (logo size nhỏ.png)
     const logoCx = 75, logoCy = C.HEADER_HEIGHT / 2, logoR = 44;
-    if (logo) {
+    if (headerLogo) {
       ctx.save();
       ctx.beginPath();
       ctx.arc(logoCx, logoCy, logoR, 0, Math.PI * 2);
       ctx.fillStyle = "#ffffff";
       ctx.fill();
       ctx.clip();
-      ctx.drawImage(logo, logoCx - logoR, logoCy - logoR, logoR * 2, logoR * 2);
+      ctx.drawImage(headerLogo, logoCx - logoR, logoCy - logoR, logoR * 2, logoR * 2);
       ctx.restore();
     } else {
       drawFallbackLogo(ctx, logoCx, logoCy, logoR);

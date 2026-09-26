@@ -73,19 +73,20 @@ const CONFIG = {
     FOOTER_ADDRESS: "298 Hà Huy Tập, Tp. Buôn Ma Thuột, Đắk Lắk",
     FOOTER_WEBSITE: "bmtu.edu.vn",
 
-    // Đường dẫn logo trường (file ảnh logo góc trái header)
+    // Đường dẫn logo góc trái header & logo watermark chìm
     LOGO_PATH: "assets/logo size nhỏ.png",
+    WATERMARK_LOGO_PATH: "assets/Logo Trường Đại Học Y Dược Buôn Ma Thuột - BMTU.svg",
 
     // Ảnh chân dung được crop tròn — vị trí & bán kính vòng tròn trên canvas
     PHOTO_CIRCLE: { cx: 200, cy: 380, r: 145 },
 
-    // Font chữ (đã import Google Fonts hỗ trợ Tiếng Việt trong index.html)
-    FONT_TITLE: "700 42px 'Playfair Display', 'Be Vietnam Pro', serif",
-    FONT_NAME: "800 48px 'Playfair Display', 'Be Vietnam Pro', serif",
-    FONT_LABEL: "800 22px 'Montserrat', 'Be Vietnam Pro', sans-serif",
-    FONT_VALUE: "800 34px 'Montserrat', 'Be Vietnam Pro', sans-serif",
-    FONT_SCHOOL: "800 28px 'Playfair Display', 'Be Vietnam Pro', serif",
-    FONT_FOOTER: "600 18px 'Montserrat', 'Be Vietnam Pro', sans-serif",
+    // Font chữ phôi thẻ sử dụng font Times New Roman chuẩn Tiếng Việt
+    FONT_TITLE: "700 42px 'Times New Roman', serif",
+    FONT_NAME: "700 48px 'Times New Roman', serif",
+    FONT_LABEL: "700 22px 'Times New Roman', 'Montserrat', sans-serif",
+    FONT_VALUE: "700 34px 'Times New Roman', serif",
+    FONT_SCHOOL: "700 28px 'Times New Roman', serif",
+    FONT_FOOTER: "600 18px 'Times New Roman', serif",
 
     // Barcode: dùng thư viện JsBarcode để vẽ mã Code 39
     BARCODE: {
