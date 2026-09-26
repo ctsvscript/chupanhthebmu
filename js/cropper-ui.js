@@ -19,12 +19,12 @@ const CropperUI = (() => {
 
     cropper = new Cropper(imgEl, {
       aspectRatio: 1,
-      viewMode: 0,
-      dragMode: "move",
+      viewMode: 1,
+      dragMode: "crop",
       autoCropArea: 0.85,
       cropBoxResizable: true,
       cropBoxMovable: true,
-      toggleDragModeOnDblclick: false,
+      toggleDragModeOnDblclick: true,
       background: false,
       preview: previewSelector,
       zoomOnWheel: true,

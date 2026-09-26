@@ -176,24 +176,27 @@ const IdCard = (() => {
     ctx.fillStyle = C.BRAND_RED;
     ctx.fillRect(0, 0, C.WIDTH, C.HEADER_HEIGHT);
 
-    // Logo Header (logo size nhỏ.png) - vừa vặn với kích thước Header, không đặt trong vòng tròn trắng
+    // Logo Header (logo size nhỏ.png) - vừa vặn với kích thước Header, tính toán vị trí chữ không bị đè
+    let schoolTextX = 145;
     if (headerLogo) {
       const maxH = C.HEADER_HEIGHT - 28;
-      const aspect = headerLogo.width / headerLogo.height;
+      const aspect = (headerLogo.width && headerLogo.height) ? (headerLogo.width / headerLogo.height) : 2.2;
       const h = Math.min(maxH, headerLogo.height || maxH);
       const w = h * aspect;
-      const logoX = 30;
+      const logoX = 25;
       const logoY = (C.HEADER_HEIGHT - h) / 2;
       ctx.drawImage(headerLogo, logoX, logoY, w, h);
+      schoolTextX = logoX + w + 20; // Chữ tên trường bắt đầu ngay sau chiều rộng logo + lề 20px
     } else {
       drawFallbackLogo(ctx, 75, C.HEADER_HEIGHT / 2, 44);
+      schoolTextX = 145;
     }
 
     // Tên trường Header
     ctx.fillStyle = "#ffffff";
     ctx.font = C.FONT_SCHOOL;
     ctx.textBaseline = "middle";
-    ctx.fillText(`${C.SCHOOL_NAME_LINE1} ${C.SCHOOL_NAME_LINE2}`, 145, C.HEADER_HEIGHT / 2);
+    ctx.fillText(`${C.SCHOOL_NAME_LINE1} ${C.SCHOOL_NAME_LINE2}`, schoolTextX, C.HEADER_HEIGHT / 2);
 
     // Tiêu đề "THẺ SINH VIÊN"
     ctx.fillStyle = C.BRAND_RED;
