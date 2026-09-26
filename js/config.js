@@ -59,11 +59,11 @@ const CONFIG = {
     WIDTH: 1050,
     HEIGHT: 660,
 
-    BRAND_RED: "#C8102E",
+    BRAND_RED: "#A50012",
     BRAND_GOLD: "#E1A83E",
-    LABEL_GREEN: "#1E8E3E",
+    LABEL_GREEN: "#00D000",
     TEXT_DARK: "#1A1A1A",
-    TEXT_GRAY: "#555555",
+    TEXT_GRAY: "#444444",
 
     HEADER_HEIGHT: 118,
     SCHOOL_NAME_LINE1: "TRƯỜNG ĐẠI HỌC Y DƯỢC",
@@ -73,29 +73,27 @@ const CONFIG = {
     FOOTER_ADDRESS: "298 Hà Huy Tập, Tp. Buôn Ma Thuột, Đắk Lắk",
     FOOTER_WEBSITE: "bmtu.edu.vn",
 
-    // Đường dẫn logo trường (PNG nền trong suốt, hình vuông).
-    // Nếu để trống hoặc không tìm thấy file, hệ thống sẽ tự vẽ 1 biểu tượng thay thế.
-    LOGO_PATH: "assets/logo.png",
+    // Đường dẫn logo trường (file ảnh logo góc trái header)
+    LOGO_PATH: "assets/logo size nhỏ.png",
 
     // Ảnh chân dung được crop tròn — vị trí & bán kính vòng tròn trên canvas
-    PHOTO_CIRCLE: { cx: 195, cy: 400, r: 155 },
+    PHOTO_CIRCLE: { cx: 200, cy: 380, r: 145 },
 
     // Font chữ (đã import Google Fonts trong index.html)
-    FONT_TITLE: "700 44px 'Playfair Display', serif",
-    FONT_NAME: "800 46px 'Montserrat', sans-serif",
-    FONT_LABEL: "700 22px 'Montserrat', sans-serif",
+    FONT_TITLE: "700 42px 'Playfair Display', serif",
+    FONT_NAME: "800 48px 'Playfair Display', serif",
+    FONT_LABEL: "800 22px 'Montserrat', sans-serif",
     FONT_VALUE: "800 34px 'Montserrat', sans-serif",
-    FONT_SCHOOL: "800 28px 'Montserrat', sans-serif",
+    FONT_SCHOOL: "800 28px 'Playfair Display', serif",
     FONT_FOOTER: "600 18px 'Montserrat', sans-serif",
 
-    // Barcode: dùng thư viện JsBarcode để vẽ mã Code 39 (tương đương font "Free 3 of 9"),
-    // KHÔNG cần cài font vì thư viện tự vẽ vạch vạch trực tiếp trên canvas.
+    // Barcode: dùng thư viện JsBarcode để vẽ mã Code 39
     BARCODE: {
       FORMAT: "CODE39",
-      HEIGHT: 60,
-      WIDTH_FACTOR: 2.4, // độ dày mỗi vạch
-      X: 470,
-      Y: 500,
+      HEIGHT: 65,
+      WIDTH_FACTOR: 2.2, // độ dày mỗi vạch
+      X: 430,
+      Y: 485,
       DISPLAY_VALUE: false,
     },
   },
