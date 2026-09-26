@@ -74,6 +74,7 @@
     btnBack: document.getElementById("btnBack"),
     btnShoot: document.getElementById("btnShoot"),
     btnCropConfirm: document.getElementById("btnCropConfirm"),
+    btnDownloadCard: document.getElementById("btnDownloadCard"),
     btnSave: document.getElementById("btnSave"),
     btnSkipBatch: document.getElementById("btnSkipBatch"),
     batchProgressWrap: document.getElementById("batchProgressWrap"),
@@ -260,6 +261,7 @@
     el.btnBack.classList.add("d-none");
     el.btnShoot.classList.add("d-none");
     el.btnCropConfirm.classList.add("d-none");
+    if (el.btnDownloadCard) el.btnDownloadCard.classList.add("d-none");
     el.btnSave.classList.add("d-none");
   }
 
@@ -307,6 +309,7 @@
     hideAllStepViews();
     el.cardPreviewView.classList.remove("d-none");
     el.btnBack.classList.remove("d-none");
+    if (el.btnDownloadCard) el.btnDownloadCard.classList.remove("d-none");
     el.btnSave.classList.remove("d-none");
   }
 
@@ -524,6 +527,15 @@
 
     el.btnShoot.addEventListener("click", handleShoot);
     el.btnCropConfirm.addEventListener("click", handleCropConfirm);
+    el.btnDownloadCard?.addEventListener("click", () => {
+      if (!composedCardDataUrl || !activeStudent) return;
+      const link = document.createElement("a");
+      const safeName = (activeStudent.hoTen || "SinhVien").trim().replace(/\s+/g, "_");
+      link.download = `TheSV_${activeStudent.mssv || "MSSV"}_${safeName}.png`;
+      link.href = composedCardDataUrl;
+      link.click();
+      toast("Đã tải ảnh thẻ về máy!", "success");
+    });
     el.btnSave.addEventListener("click", handleSave);
     el.btnBack.addEventListener("click", handleBack);
     el.btnSkipBatch.addEventListener("click", handleSkipBatch);
