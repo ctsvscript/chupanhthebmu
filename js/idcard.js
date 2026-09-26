@@ -128,9 +128,9 @@ const IdCard = (() => {
   }
 
   function drawBarcode(mssv) {
-    const code39Value = `*${mssv}*`;
+    const cleanMssv = (mssv || "").trim().toUpperCase();
     const bcCanvas = document.createElement("canvas");
-    JsBarcode(bcCanvas, code39Value, {
+    JsBarcode(bcCanvas, cleanMssv, {
       format: C.BARCODE.FORMAT,
       height: C.BARCODE.HEIGHT,
       width: C.BARCODE.WIDTH_FACTOR,
@@ -176,19 +176,17 @@ const IdCard = (() => {
     ctx.fillStyle = C.BRAND_RED;
     ctx.fillRect(0, 0, C.WIDTH, C.HEADER_HEIGHT);
 
-    // Badge Logo Header (logo size nhỏ.png)
-    const logoCx = 75, logoCy = C.HEADER_HEIGHT / 2, logoR = 44;
+    // Logo Header (logo size nhỏ.png) - vừa vặn với kích thước Header, không đặt trong vòng tròn trắng
     if (headerLogo) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(logoCx, logoCy, logoR, 0, Math.PI * 2);
-      ctx.fillStyle = "#ffffff";
-      ctx.fill();
-      ctx.clip();
-      ctx.drawImage(headerLogo, logoCx - logoR, logoCy - logoR, logoR * 2, logoR * 2);
-      ctx.restore();
+      const maxH = C.HEADER_HEIGHT - 28;
+      const aspect = headerLogo.width / headerLogo.height;
+      const h = Math.min(maxH, headerLogo.height || maxH);
+      const w = h * aspect;
+      const logoX = 30;
+      const logoY = (C.HEADER_HEIGHT - h) / 2;
+      ctx.drawImage(headerLogo, logoX, logoY, w, h);
     } else {
-      drawFallbackLogo(ctx, logoCx, logoCy, logoR);
+      drawFallbackLogo(ctx, 75, C.HEADER_HEIGHT / 2, 44);
     }
 
     // Tên trường Header

@@ -298,10 +298,18 @@
     el.btnBack.classList.remove("d-none");
     el.btnCropConfirm.classList.remove("d-none");
 
-    el.cropImage.onload = () => {
-      CropperUI.init(el.cropImage, "#cropPreviewCircle", el.zoomRange);
+    const initCropper = () => {
+      setTimeout(() => {
+        CropperUI.init(el.cropImage, "#cropPreviewCircle", el.zoomRange);
+      }, 60);
     };
+
+    el.cropImage.onload = initCropper;
     el.cropImage.src = rawPhotoDataUrl;
+
+    if (el.cropImage.complete && el.cropImage.naturalWidth > 0) {
+      initCropper();
+    }
   }
 
   function goToCardPreview() {

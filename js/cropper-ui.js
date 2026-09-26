@@ -8,6 +8,7 @@
 
 const CropperUI = (() => {
   let cropper = null;
+  let baseRatio = 1;
 
   /**
    * Khởi tạo Cropper trên 1 thẻ <img> đã có src, đồng bộ xem trước
@@ -18,28 +19,30 @@ const CropperUI = (() => {
 
     cropper = new Cropper(imgEl, {
       aspectRatio: 1,
-      viewMode: 1,
+      viewMode: 0,
       dragMode: "move",
       autoCropArea: 0.85,
-      cropBoxResizable: false,
-      cropBoxMovable: false,
+      cropBoxResizable: true,
+      cropBoxMovable: true,
       toggleDragModeOnDblclick: false,
       background: false,
       preview: previewSelector,
       zoomOnWheel: true,
       responsive: true,
       ready() {
+        const imageData = cropper.getImageData();
+        baseRatio = (imageData && imageData.naturalWidth) ? (imageData.width / imageData.naturalWidth) : 1;
         if (zoomRangeEl) {
-          const { ZOOM_MIN, ZOOM_MAX, ZOOM_STEP } = CONFIG.CROPPER;
-          zoomRangeEl.min = ZOOM_MIN;
-          zoomRangeEl.max = ZOOM_MAX;
-          zoomRangeEl.step = ZOOM_STEP;
-          zoomRangeEl.value = 1;
+          zoomRangeEl.min = "0.2";
+          zoomRangeEl.max = "3.0";
+          zoomRangeEl.step = "0.02";
+          zoomRangeEl.value = "1.0";
         }
       },
       zoom(event) {
-        if (zoomRangeEl) {
-          zoomRangeEl.value = event.detail.ratio.toFixed(2);
+        if (zoomRangeEl && baseRatio > 0 && event.detail && event.detail.ratio) {
+          const currentScale = event.detail.ratio / baseRatio;
+          zoomRangeEl.value = Math.max(0.2, Math.min(3.0, currentScale)).toFixed(2);
         }
       },
     });
@@ -47,8 +50,11 @@ const CropperUI = (() => {
     return cropper;
   }
 
-  function setZoom(ratio) {
-    if (cropper) cropper.zoomTo(parseFloat(ratio));
+  function setZoom(scale) {
+    if (cropper && baseRatio > 0) {
+      const targetRatio = baseRatio * parseFloat(scale);
+      cropper.zoomTo(targetRatio);
+    }
   }
 
   /**
@@ -62,7 +68,7 @@ const CropperUI = (() => {
       imageSmoothingEnabled: true,
       imageSmoothingQuality: "high",
     });
-    return canvas.toDataURL("image/jpeg", CONFIG.IMAGE_QUALITY);
+    return canvas ? canvas.toDataURL("image/jpeg", CONFIG.IMAGE_QUALITY) : null;
   }
 
   function destroy() {
