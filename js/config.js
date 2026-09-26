@@ -79,13 +79,13 @@ const CONFIG = {
     // Ảnh chân dung được crop tròn — vị trí & bán kính vòng tròn trên canvas
     PHOTO_CIRCLE: { cx: 200, cy: 380, r: 145 },
 
-    // Font chữ (đã import Google Fonts trong index.html)
-    FONT_TITLE: "700 42px 'Playfair Display', serif",
-    FONT_NAME: "800 48px 'Playfair Display', serif",
-    FONT_LABEL: "800 22px 'Montserrat', sans-serif",
-    FONT_VALUE: "800 34px 'Montserrat', sans-serif",
-    FONT_SCHOOL: "800 28px 'Playfair Display', serif",
-    FONT_FOOTER: "600 18px 'Montserrat', sans-serif",
+    // Font chữ (đã import Google Fonts hỗ trợ Tiếng Việt trong index.html)
+    FONT_TITLE: "700 42px 'Playfair Display', 'Be Vietnam Pro', serif",
+    FONT_NAME: "800 48px 'Playfair Display', 'Be Vietnam Pro', serif",
+    FONT_LABEL: "800 22px 'Montserrat', 'Be Vietnam Pro', sans-serif",
+    FONT_VALUE: "800 34px 'Montserrat', 'Be Vietnam Pro', sans-serif",
+    FONT_SCHOOL: "800 28px 'Playfair Display', 'Be Vietnam Pro', serif",
+    FONT_FOOTER: "600 18px 'Montserrat', 'Be Vietnam Pro', sans-serif",
 
     // Barcode: dùng thư viện JsBarcode để vẽ mã Code 39
     BARCODE: {

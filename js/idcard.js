@@ -135,6 +135,14 @@ const IdCard = (() => {
    * @returns {Promise<string>} dataURL (image/jpeg) của thẻ đã ghép
    */
   async function composeCard(data) {
+    if (document.fonts && document.fonts.ready) {
+      try {
+        await document.fonts.ready;
+      } catch (e) {
+        console.warn("Font loading ready error:", e);
+      }
+    }
+
     const canvas = document.createElement("canvas");
     canvas.width = C.WIDTH;
     canvas.height = C.HEIGHT;
